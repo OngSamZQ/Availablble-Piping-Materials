@@ -1,0 +1,8 @@
+{
+  "logisticsEmail": "sam.ong@uesh-chec.sg",
+  "lists": [
+    {"label": "FWTF & SIF #1 SS", "file": "Material List - FTWF & SIF 01 - SS.json", "updated": "2026-10-01"},
+    {"label": "FWTF & SIF #1 CS", "file": "Material List - FTWF & SIF 01 - CS.json", "updated": "2026-10-01"},
+    {"label": "PWWTP #1", "file": "Material List - PWWTP 01.json", "updated": "2026-10-01"}
+  ]
+}
