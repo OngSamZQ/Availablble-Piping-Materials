@@ -5,12 +5,32 @@
 <title>Balance Piping Materials</title>
 <style>
 *{box-sizing:border-box}body{font:15px/1.45 Arial,sans-serif;background:#f4f6f9;color:#172b40;margin:20px}h1{color:#003366;font-size:26px}h2{font-size:19px;margin-top:0}button,a.button{padding:10px 16px;border:0;background:#003366;color:white;border-radius:5px;cursor:pointer;font:inherit;text-decoration:none;display:inline-block}button:hover{background:#0056b3}button:disabled{opacity:.5;cursor:not-allowed}button[aria-pressed=true]{outline:3px solid #64a8dd;outline-offset:2px}.buttons,.form-row,.search-row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.card{background:white;padding:18px;margin:16px 0;border-radius:8px;box-shadow:0 1px 5px #0001}.form-group{display:flex;flex-direction:column;gap:5px;flex:1 1 200px}label{font-weight:bold}input{font:inherit;padding:9px;border:1px solid #8293a3;border-radius:4px;max-width:100%}input:focus,button:focus-visible,a:focus-visible{outline:3px solid #64a8dd;outline-offset:2px}.status{padding:12px 0;font-weight:bold}.muted{color:#526374;font-size:14px}.error{background:#ffeded;color:#8b1212;border:1px solid #e5a2a2;padding:12px;border-radius:5px;white-space:pre-line}.generate{background:#08783d}.table-container{overflow:auto;max-height:560px;background:white;border-radius:6px}table{width:100%;border-collapse:collapse}#inventoryTable{min-width:900px}th{background:#003366;color:white;text-align:left;position:sticky;top:0;padding:10px;z-index:1}td{border:1px solid #dce2e8;padding:9px;vertical-align:top}th:first-child{width:65px}th:last-child{width:140px}.description{min-width:260px;white-space:normal;overflow-wrap:anywhere}.qty{width:110px}.selected{background:#eff8ff}.insufficient{background:#ffe0e0}.summary-list{padding-left:22px}.summary-list li{margin:8px 0}.remove{font-size:13px;padding:4px 9px;margin-left:10px;background:#526374}.search-row .form-group{max-width:600px}#selectedCount{font-weight:bold}input[type=checkbox]{width:20px;height:20px}@media(max-width:600px){body{margin:12px}h1{font-size:22px}.card{padding:13px}.buttons button{flex:1 1 140px}.form-group{flex-basis:100%}.search-row{align-items:stretch}.search-row button{width:100%}}
+
+/* Fixed workspace: only the materials table scrolls during browsing. */
+body{margin:0;padding:10px 16px;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.top-panel{flex:none;max-height:55%;overflow:auto;padding:2px 2px 4px;background:#f4f6f9}
+h1{font-size:22px;margin:0 0 2px}.top-panel>p{margin:0 0 8px;font-size:12px}
+.list-toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.status{padding:0;font-size:13px}
+.buttons{gap:8px}button,a.button{padding:7px 12px;font-size:14px}
+.top-panel .card{padding:8px 10px;margin:8px 0 0}.top-panel h2{font-size:14px;margin:0 0 5px}
+.form-row{gap:12px}.form-group{gap:3px}label{font-size:13px}input{padding:6px 8px;min-width:0;width:100%;height:34px}
+.search-row{gap:12px}.search-row .form-group{flex-direction:row;align-items:center;max-width:650px}.search-row label{white-space:nowrap}.search-row input{flex:1}.search-row button{height:34px}
+.error{margin-top:8px;max-height:100px;overflow:auto;padding:8px}
+.table-container{flex:1;min-height:100px;max-height:none;border:1px solid #dce2e8;overscroll-behavior:contain}
+input[type=checkbox]{width:20px;height:20px}
+.request-summary{flex:none;background:white;border-radius:6px;box-shadow:0 1px 5px #0001}
+.request-summary>summary{cursor:pointer;padding:8px 12px;font-weight:bold;font-size:14px}
+.request-summary>summary #selectedCount{display:inline;margin-left:8px;font-weight:normal}
+.request-summary .card{margin:0;padding:8px 12px;max-height:28vh;overflow:auto;box-shadow:none}.request-summary .muted{margin:0 0 6px}.summary-list{margin:6px 0}
+#emailStatus{flex:none;margin:0;font-size:12px}
+@media(max-width:600px){body{padding:8px;gap:6px}h1{font-size:18px}.top-panel{max-height:50%}.top-panel>p{font-size:11px;margin-bottom:6px}.list-toolbar{gap:6px}.buttons{gap:6px}#listButtons{flex-wrap:nowrap;width:100%}#listButtons button{flex:1;padding:7px 4px;font-size:11px}.status{font-size:11px}.form-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 8px}.form-group{min-width:0}.top-panel label{font-size:11px}.top-panel input{font-size:13px}.search-row .form-group{flex-basis:100%;max-width:none}.search-row button{width:auto}.search-row{gap:6px;align-items:center}#resultCount{font-size:11px}.request-summary .buttons button{flex:1}#emailStatus{font-size:11px}}
 </style></head>
 <body>
+<header class="top-panel">
 <h1>EPC2 Available Piping Materials</h1>
 <p class="muted">Published stock snapshot. Requests do not reserve materials; availability is confirmed by Logistics before issue.</p>
-<div id="listButtons" class="buttons" aria-label="Material lists"></div>
-<div id="currentList" class="status" role="status">Loading lists…</div>
+<div class="list-toolbar"><div id="listButtons" class="buttons" aria-label="Material lists"></div>
+<div id="currentList" class="status" role="status">Loading lists…</div></div>
 <div id="errorBanner" class="error" role="alert" hidden></div>
 <section class="card"><h2>Request information</h2><div class="form-row">
 <div class="form-group"><label for="requester">Requester name *</label><input id="requester" type="text" maxlength="120" autocomplete="name" required></div>
@@ -19,8 +39,10 @@
 <div class="form-group"><label for="remarks">Remarks</label><input id="remarks" type="text" maxlength="1000"></div>
 </div></section>
 <section class="card search-row"><div class="form-group"><label for="searchBox">Search materials</label><input id="searchBox" type="search" placeholder="Search any field in this list…"></div><button class="generate" data-generate disabled>Generate Material Request</button><span id="resultCount" class="muted" role="status"></span></section>
+</header>
 <div class="table-container" aria-label="Available materials" tabindex="0"><table id="inventoryTable"></table></div>
-<section class="card" aria-label="Selected materials"><h2>Request summary</h2><p id="selectedCount" role="status">0 items selected</p><p class="muted">Selections are kept when searching or switching lists. All selected lists are included in one request.</p><ul id="summary" class="summary-list"></ul><div class="buttons"><button id="clearSelection" disabled>Clear selection</button><button class="generate" data-generate disabled>Generate Material Request</button></div></section>
+<details class="request-summary"><summary>Request summary <span id="selectedCount" role="status">0 items selected</span></summary><section class="card" aria-label="Selected materials"><p class="muted">Selections are kept when searching or switching lists. All selected lists are included in one request.</p><ul id="summary" class="summary-list"></ul><div class="buttons"><button id="clearSelection" disabled>Clear selection</button><button class="generate" data-generate disabled>Generate Material Request</button></div></section>
+</details>
 <p id="emailStatus" class="muted"></p>
 <script>
 'use strict';
