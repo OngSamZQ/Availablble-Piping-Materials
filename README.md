@@ -1,4 +1,4 @@
-# EPC2 Piping Materials
+# Piping Materials
 
 Static material availability and request-form website for GitHub Pages.
 
